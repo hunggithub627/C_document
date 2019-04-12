@@ -1,0 +1,7 @@
+echo 
+set NAME=E60QV2_03_F1
+@RD /S /Q %~dp0release\%NAME%     清除檔案
+xcopy /E /I %~dp0\03_F1\F1\F1\bin\Release %~dp0\Release\%NAME%    複製檔案
+pause
+
+%~dp0 當下路徑

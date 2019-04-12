@@ -1,0 +1,11 @@
+        private void btn_ShowMap_Click(object sender, EventArgs e)
+        {
+            _show_map_file = true;
+            OpenFileDialog file = new OpenFileDialog();
+            file.ShowDialog();
+            _map_file_name = file.SafeFileName;
+
+        }
+
+
+string[] lines = System.IO.File.ReadAllLines(path + @"\"+ _map_file_name);

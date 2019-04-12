@@ -1,0 +1,20 @@
+©ì¦²BAR 
+private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            webBrowser1.Document.Window.ScrollTo(80, 380);
+        }
+
+ÂsÄýºô­¶
+ private void button1_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("https://stock.wearn.com/a8299.html");
+}
+
+
+¸õ¹LERROR
+ public Form1()
+        {
+            InitializeComponent();
+            webBrowser1.ScriptErrorsSuppressed = true;
+}
+

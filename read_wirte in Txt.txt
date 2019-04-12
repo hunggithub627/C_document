@@ -1,0 +1,15 @@
+¼g¤J
+void printlog(string data)
+        {
+            string path = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            using (System.IO.StreamWriter file =
+            new System.IO.StreamWriter(path+@"\log.txt", true))
+            {
+                file.WriteLine(data);
+            }
+        }
+
+Åª¨ú
+
+string[] lines = System.IO.File.ReadAllLines(@"d:\8195AM_WlanLab_vk008.map");

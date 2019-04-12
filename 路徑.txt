@@ -1,0 +1,4 @@
+2.取得啟動了應用程序的可執行文件的路徑，不包括可執行文件的名稱。
+string str = System.Windows.Forms.Application.StartupPath;
+
+System.AppDomain.CurrentDomain.BaseDirectory;

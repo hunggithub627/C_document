@@ -1,0 +1,10 @@
+ProcessStartInfo info = new ProcessStartInfo("iperf.exe", @" -c " + tgip + " -r");  // bidirection
+
+info.UseShellExecute = false;
+info.RedirectStandardOutput = true;
+info.RedirectStandardInput = true;
+info.RedirectStandardError = true;
+info.CreateNoWindow = true;
+
+Process pro = Process.Start(info);
+pro.WaitForExit();

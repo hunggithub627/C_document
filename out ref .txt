@@ -1,0 +1,13 @@
+用 out , 除非一定要用到 ref  (ref 須給初始值)
+
+As a minor difference, an out parameter needs not be initialized.
+
+Example for out:
+
+string a, b;
+person.GetBothNames(out a, out b);
+
+Example for ref:
+
+string name = textbox.Text;
+bool didModify = validator.SuggestValidName(ref name);

@@ -1,0 +1,5 @@
+string SelectedTab = tabControl1.SelectedTab.Name.ToString();
+
+ // Contacts_Table
+if (SelectedTab == "tab_eeprom")
+{}

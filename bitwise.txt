@@ -1,0 +1,7 @@
+sbyte efuse_Offset_HT20 = 0;
+sbyte efuse_Offset_OFDM = 0; 
+
+efuse_Offset_HT20 = Convert.ToSByte(numup_Dht20.Value); // -1
+efuse_Offset_OFDM = Convert.ToSByte(numup_Dofdm.Value); // -2
+
+int a = (int)(efuse_Offset_HT20 << 4 &0xf0 | efuse_Offset_OFDM & 0xf);

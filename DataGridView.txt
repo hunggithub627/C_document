@@ -1,0 +1,32 @@
+DataGridViewRowCollection rows = dataGridView1.Rows;
+
+rows.Add(new Object[] { "小名", 25,174 });
+rows.Add(new Object[] { "小王", 25, "what ?"});
+rows.Add(new Object[] { string.Empty, 25, 3.1414 });
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+DataGridViewRowCollection rows = dataGridView1.Rows;
+this.dataGridView1.RowCount = 1;         從此位置開始加入資料
+this.dataGridView1.RowHeadersWidth = 50; 列標頭的寬度
+
+加入資料 以16進制 兩位表示
+rows.Add(new object[] { map_file_data[i, 0].ToString("X2"), map_file_data[i, 1].ToString("X2"), map_file_data[i, 2].ToString("X2"), map_file_data[i, 3].ToString("X2"),
+   map_file_data[i, 4].ToString("X2"), map_file_data[i, 5].ToString("X2"), map_file_data[i, 6].ToString("X2"), map_file_data[i, 7].ToString("X2"),
+   map_file_data[i, 8].ToString("X2"), map_file_data[i, 9].ToString("X2"), map_file_data[i, 10].ToString("X2"), map_file_data[i, 11].ToString("X2"),
+   map_file_data[i, 12].ToString("X2"), map_file_data[i, 13].ToString("X2"), map_file_data[i, 14].ToString("X2"), map_file_data[i, 15].ToString("X2"),
+ });
+
+顯示列標投文字
+for (int i = 0; i < this.dataGridView1.Rows.Count - 1; i++) 先找到所有的列數
+{
+    this.dataGridView1.Rows[i].HeaderCell.Value = (i).ToString("X2");
+}
+
+
+讀值 改變背景顏色
+if (this.dataGridView1.Rows[i].Cells[j].Value.ToString() != "FF")
+{
+    dataGridView1.Rows[i].Cells[j].Style.BackColor = Color.Red;
+}
