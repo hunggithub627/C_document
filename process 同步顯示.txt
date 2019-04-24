@@ -1,0 +1,77 @@
+btn click
+{
+	ProcessStartInfo info = new ProcessStartInfo("iperf.exe", process_para);
+
+	info.UseShellExecute = false;
+	info.RedirectStandardOutput = true;
+	info.RedirectStandardInput = true;
+	info.RedirectStandardError = true;
+	info.CreateNoWindow = true;
+
+	Process pro = Process.Start(info);
+	pro.OutputDataReceived += p_OutputDataReceived; //同步顯示iperf cmd.exe 的畫面在 richtextbox上 
+	pro.BeginOutputReadLine();
+
+	//pro.WaitForExit();
+	Thread thread_receive = new Thread(data_receive);  // 最後顯示抓到目標的值印出
+	thread_receive.Start();  
+}
+
+private void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
+{
+	string data = "";
+	if (!string.IsNullOrEmpty(e.Data))
+	{
+		data = e.Data.ToString();
+		set_rtb_msg("\n");
+		set_rtb_msg(data);
+		_buf_all = _buf_all + data;
+	}
+
+}
+
+private void data_receive()
+{
+	string end_str = txb_duration.Text.Trim() + ".0 " + "sec";
+
+	while (true)
+	{
+		if (_buf_all.Contains(end_str))
+		{
+			Sleep(1000); // get the final rate
+			string througput = _buf_all.Substring(_buf_all.LastIndexOf("MBytes") + 6, _buf_all.LastIndexOf("Mbits/sec") - _buf_all.LastIndexOf("MBytes") - 6).Trim();
+			set_label_throughput(througput);
+			_buf_all = "";
+			break;
+		}
+	}
+
+}
+
+private void set_label_throughput(string text)
+{
+	if (lbl_throughput.InvokeRequired)
+	{
+		DelSetText del = new DelSetText(set_label_throughput);
+		this.Invoke(del, new object[] { text });
+	}
+	else
+	{
+		lbl_throughput.ForeColor = System.Drawing.Color.Green;
+		lbl_throughput.Text = "Throughput : " + text + " Mbits/sec";
+	}
+}
+
+private void set_rtb_msg(string text)
+{
+	if (lbl_throughput.InvokeRequired)
+	{
+		DelSetText del = new DelSetText(set_rtb_msg);
+		this.Invoke(del, new object[] { text });
+	}
+	else
+	{
+		rtb_msg.AppendText(text);
+		rtb_msg.ScrollToCaret();
+	}
+}

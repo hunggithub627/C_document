@@ -1,0 +1,17 @@
+static bool m_IsTerminated = false;
+
+
+Process pro = Process.Start(info);
+pro.OutputDataReceived += p_OutputDataReceived;
+pro.BeginOutputReadLine();
+
+pro.EnableRaisingEvents = true;   // 需新增此參數
+pro.Exited += delegate { m_IsTerminated = true; }; //判斷是否離開
+
+while (!m_IsTerminated)
+{
+	Thread.Sleep(5000);
+	MessageBox.Show("Check dut server");
+	m_IsTerminated = false;
+	return;
+}
