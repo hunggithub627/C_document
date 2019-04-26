@@ -1,0 +1,89 @@
+[C#] 提升資料讀寫效能(使用緩衝資料流)
+
+Introduction
+
+使用緩衝資料流經由作業系統所配置的記憶體區塊讀寫資料，減少直接對底層資料來源作存取，進而提升 IO 的操作效能。
+
+這邊使用 Console 專案實作。
+
+ 
+
+Example
+
+public class BufferedIO {
+    //宣告檔案讀寫串流變數
+    FileStream FileReadStream;
+    FileStream FileWriteStream;
+    //宣告資料緩衝輸入輸出變數
+    BufferedStream myBufferedStreamInput;
+    BufferedStream myBufferedStreamOutput;
+
+    public static void Main() {
+        string strReadFile;
+        string strWriteFile;
+
+        Console.WriteLine("輸入欲讀取檔案名稱 : ");
+        strReadFile = Console.ReadLine(); //請輸入 bFile.txt
+        Console.WriteLine("輸入欲寫入檔案名稱 : ");
+        strWriteFile = Console.ReadLine(); //請輸入 bFileW.txt
+
+        BufferedIO myBufferedIO = new BufferedIO();
+        myBufferedIO.CreateStream(strReadFile, strWriteFile);
+
+        Console.WriteLine("開始讀取檔案....");
+        myBufferedIO.AccessData();
+        Console.WriteLine("檔案寫入完成....");
+        myBufferedIO.CloseStream();
+        Console.WriteLine("資料存取完成，關閉資料流....");
+        Console.Read();
+    }
+
+    //建立串流物件函式
+    private void CreateStream(string strReadFile, string strWriteFile) {
+        //建立檔案讀取串流物件
+        FileReadStream = new FileStream
+            (strReadFile, FileMode.Open, FileAccess.Read);
+        //建立檔案存取串流物件
+        FileWriteStream = new FileStream
+            (strWriteFile, FileMode.Create, FileAccess.Write);
+        //建立緩衝輸入物件
+        myBufferedStreamInput = new BufferedStream(FileReadStream);
+        //建立緩衝輸出物件
+        myBufferedStreamOutput = new BufferedStream(FileWriteStream);
+    }
+
+    //
+    private void AccessData() {
+        //建立大小為 16 的 byte 陣列
+        byte[] byteBuffer = new byte[16];
+        int intByte = 0;
+        do {
+            //透過緩衝輸入物件，將資料讀到 陣列
+            //一次讀取 16 個位元組長度
+            intByte = myBufferedStreamInput.Read(byteBuffer, 0, 16);
+            //同樣的透過緩衝物件輸出資料
+            myBufferedStreamOutput.Write(byteBuffer, 0, intByte);
+
+            //將緩衝區資料清除
+            myBufferedStreamInput.Flush();
+            myBufferedStreamOutput.Flush();
+        }
+        while (intByte > 0);
+    }
+
+    //關閉串流物件
+    private void CloseStream() {       
+        FileReadStream.Close();
+        FileReadStream.Dispose();
+        FileReadStream = null;
+        FileWriteStream.Close();
+        FileWriteStream.Dispose();
+        FileWriteStream = null;
+        myBufferedStreamInput.Close();
+        myBufferedStreamInput.Dispose();
+        myBufferedStreamInput = null;
+        myBufferedStreamOutput.Close();
+        myBufferedStreamOutput.Dispose();
+        myBufferedStreamOutput = null;
+        
+    }
