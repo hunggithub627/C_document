@@ -1,0 +1,88 @@
+static void Main(string[] args)
+{
+    Thread t1 = new Thread(MyBackgroundTask);
+    Thread t2 = new Thread(MyBackgroundTask);
+    Thread t3 = new Thread(MyBackgroundTask);
+
+    t1.Start("X");
+    t2.Start("Y");
+    t3.Start("Z");
+
+    t1.Join();
+    t2.Join();
+    t3.Join();
+
+    for (int i = 0; i < 500; i++)
+    {
+        Console.Write(".");
+    }
+}
+
+這次我在 Main 函式中加入了三行程式碼，分別呼叫三個執行緒物件的 Join 方法。
+這會令主執行緒依序等待 t1、t2、t3 執行完畢之後才繼續跑底下的迴圈。執行結果如下圖： 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+public class SharedStateDemo
+{
+    private int itemCount = 0;    
+    private object locker = new Object(); // 用於獨佔鎖定的物件
+
+    public void Run()
+    {
+        var t1 = new Thread(AddToCart);
+        var t2 = new Thread(AddToCart);
+
+        t1.Start(300);
+        t2.Start(100);
+    }
+
+    private void AddToCart(object simulateDelay)
+    {
+        Console.WriteLine("Enter thread {0}", // 顯示目前所在的執行緒編號
+            Thread.CurrentThread.ManagedThreadId); 
+        lock (locker)  // 利用 locker 物件來鎖定程式區塊
+        {
+            itemCount++;
+
+            Thread.Sleep((int)simulateDelay);
+            Console.WriteLine("Items in cart: {0} on thread {1}",
+                itemCount, Thread.CurrentThread.ManagedThreadId);
+        }
+    }
+}
+類別中多了一個型別為 Object 的私有成員：locker。此物件是用來作為獨佔鎖定之用，
+可以是任何參考型別。
+
+AddCart 函式中增加了 lock 敘述。當兩條執行緒同時爭搶同一個鎖定物件時，
+其中一條執行緒會被擋住，等到被鎖定的物件被先前搶到的執行緒釋放了，
+才能夠取得鎖定。
+如此便能夠確保以 lock 關鍵字包住的程式區塊在同一時間內只會有一條執行緒進入。
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+one button : do start(loop)  and stop -> start ->stop
+
+Thread thread_vsa;
+bool b_vsa;
+
+private void btn_vsa_cont_Click(object sender, EventArgs e)
+        {
+
+            if (b_vsa)
+            {
+                btn_vsa_cont.Text = "Continuous VSA";
+                thread_vsa.Abort();
+                Thread.Sleep(1000);
+                SetText("vsa stop");
+                b_vsa = false;
+            }
+            else
+            {
+                btn_vsa_cont.Text = "Stop";
+                thread_vsa = new Thread(new ThreadStart(runvsa));
+                thread_vsa.IsBackground = true;
+                thread_vsa.Start();
+                b_vsa = true;
+            }
+        }

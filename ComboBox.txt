@@ -1,0 +1,38 @@
+切換combobox1 調整combobox2 的item
+
+List<string> list1 = new List<string>();
+List<string> list2 = new List<string>();
+List<string> list2_2 = new List<string>();
+
+private void Form1_Load(object sender, EventArgs e)
+{
+	list1.Add("b mode");
+	list1.Add("g mode");
+
+	list2_2.Add("48m");
+	list2_2.Add("54m");
+
+	list2.Add("5.5m");
+	list2.Add("11m");
+
+	list1_cbx.DataSource = list1;
+	list2_cbx.DataSource = list2;
+
+	list1_cbx.SelectedIndex = 0;
+	list2_cbx.SelectedIndex = 0;
+
+}
+
+private void list1_cbx_SelectedIndexChanged(object sender, EventArgs e)
+{
+	if (list1_cbx.SelectedIndex == 0)
+	{
+	  	list2_cbx.DataSource = list2;
+		list2_cbx.SelectedIndex = 0;
+	}
+	else
+	{
+	 	list2_cbx.DataSource = list2_2;
+		list2_cbx.SelectedIndex = 0;
+	}
+}

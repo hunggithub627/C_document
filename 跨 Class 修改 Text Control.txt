@@ -1,0 +1,55 @@
+﻿法一:
+Form1.designer.cs
+public System.Windows.Forms.RichTextBox rtb_msg;  // 修改 private - > public 屬性 給 Tx class 使用
+
+Form1.cs
+Tx tx;
+private void btn_TxStart_Click(object sender, EventArgs e)
+{
+	tx = new Tx(srp, this); // 將 this 即 form1 傳給 Tx class 建構子
+}
+
+Tx.cs
+   Form1 _frm; 
+public Tx(SerialPortCommand srp_in, Form1 frm)
+{
+	srp = srp_in;
+	_frm = frm;     // 接收 form1 建構子
+}
+
+private void SetText(string text)
+{
+	if (_frm.rtb_msg.InvokeRequired)
+	{
+		StrText_Del d = new StrText_Del(SetText);
+		_frm.Invoke(d, new object[] { text });
+	}
+	else
+	{
+		_frm.rtb_msg.AppendText(text);
+		_frm.rtb_msg.ScrollToCaret();
+		Application.DoEvents();
+	}
+}
+
+法二 : 較好  不用動到 cnotrol 元件的屬性
+
+Form1.cs
+Tx tx;
+private void btn_TxStart_Click(object sender, EventArgs e)
+{
+	tx = new Tx(srp, this); // 將 this 即 form1 傳給 Tx class 建構子
+}
+
+Tx.cs
+   Form1 _frm; 
+public Tx(SerialPortCommand srp_in, Form1 frm)
+{
+	srp = srp_in;
+	_frm = frm;     // 接收 form1 建構子
+}
+
+public method()
+{
+	_frm.SetText(buffer_ret);
+}

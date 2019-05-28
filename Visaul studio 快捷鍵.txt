@@ -3,3 +3,13 @@ CTRL K D : 排版
 F7 : 回到編輯畫面
 F12 : 查看定義
 Ctrl - : 跳回上一步
+Ctrl + M + M
+
+2.註釋程式碼
+  註釋程式碼             Ctrl K C（comment）
+  反註釋程式碼           Ctrl K U
+
+1）調整一行：按住Alt鍵同時，按方向鍵上或下可以調整程式碼的順序
+
+ctrl enter
+ctrl shit enter

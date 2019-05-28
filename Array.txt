@@ -1,0 +1,9 @@
+將 含有 0xd 的值 的元素移除
+byte[] data_cable_loss = new byte[8192];
+data_cable_loss = File.ReadAllBytes(path);
+int myRemoveNum = 0xd;
+data_cable_loss = Array.FindAll(data_cable_loss, val => val != myRemoveNum).ToArray();
+
+Array 反轉
+byte[] len_byte = BitConverter.GetBytes(len); // length's array  4 bytes (big edian)
+Array.Reverse(len_byte);
