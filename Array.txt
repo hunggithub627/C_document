@@ -1,4 +1,4 @@
-將 含有 0xd 的值 的元素移除
+﻿將 含有 0xd 的值 的元素移除
 byte[] data_cable_loss = new byte[8192];
 data_cable_loss = File.ReadAllBytes(path);
 int myRemoveNum = 0xd;
@@ -7,3 +7,15 @@ data_cable_loss = Array.FindAll(data_cable_loss, val => val != myRemoveNum).ToAr
 Array 反轉
 byte[] len_byte = BitConverter.GetBytes(len); // length's array  4 bytes (big edian)
 Array.Reverse(len_byte);
+
+
+將int[]  轉 double[]
+dataOut = Array.ConvertAll<int, double>(dataIn, x => x);
+
+將string[]  轉 int[]
+int[] channel = Array.ConvertAll(str_ch, s => int.Parse(s));
+
+Array 重新定義大小
+Array.Resize(ref array_in, 3);
+
+

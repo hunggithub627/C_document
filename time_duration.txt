@@ -1,3 +1,0 @@
-log.endtime = DateTime.Now;
-TimeSpan duration = log.endtime - log.starttime;
-log.testtime = ((int)(duration.TotalSeconds)).ToString();
