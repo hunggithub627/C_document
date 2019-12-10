@@ -1,0 +1,16 @@
+使用 throw new Exciption  強制進入 exception
+try
+{
+       int start_index = data.IndexOf("start");
+       int end_index = data.IndexOf("end");
+
+        if(start_index > end_index)
+        {
+           throw new Exception();
+        }
+         
+ }
+ catch
+ {
+       return "Exciption case";
+ }

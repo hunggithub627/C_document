@@ -1,0 +1,24 @@
+Action<T> : 礚  Τ把计 Action<in,in...>
+Func<T>   : Τ㎝把计     Func<int,int...out>
+
+筽 Delegate 猭
+ぃノ暗Delegate 
+
+EX :
+
+static void method1_delintint(int a,int b)
+{
+      Console.WriteLine((a + b).ToString() + " method1_delintint");
+}
+
+static void method1_delintint2(int a, int b)
+{
+    Console.WriteLine((a - b).ToString() + " method1_delintint");
+}
+main 
+{
+Action<int, int> actionop = new Action<int, int>(method1_delintint);
+actionop +=  new Action<int, int>(method1_delintint2);
+
+actionop(1,2);
+}

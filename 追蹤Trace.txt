@@ -1,0 +1,2 @@
+sxstrace Trace -logfile:D:\a.log
+sxstrace Parse -logfile:D:\a.log -outfile:D:\out.txt

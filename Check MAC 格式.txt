@@ -1,0 +1,1 @@
+return System.Text.RegularExpressions.Regex.IsMatch(data, @"\A\b[0-9a-fA-F]+\b\Z");

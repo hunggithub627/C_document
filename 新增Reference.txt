@@ -1,0 +1,5 @@
+右鍵 project
+新增 reference 引用其DLL
+
+若是放在C槽之類的 DLL
+要加入電腦的系統環境變數

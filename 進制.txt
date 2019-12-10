@@ -1,0 +1,10 @@
+string xtal = "36";
+string x1 = Convert.ToInt32(xtal).ToString("X2");
+int a1 = Convert.ToInt32(xtal, 16);
+int a2 = Convert.ToInt32(xtal, 10);
+int a3 = Convert.ToInt32(xtal);
+
+x1 = "24"
+a1 = 54  -> 3*16 + 5
+a2 = 36
+a3 = 36

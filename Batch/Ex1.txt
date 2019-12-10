@@ -1,0 +1,26 @@
+batch 檔名 ntx_wtf2awf.bat
+
+@echo "converting %1 to %1.awf ..."
+@if (%2)==() (
+	set wfbit=5
+	echo waveform bit default is %wfbit%
+) else (
+	echo "waveform bit set to %2"
+	set wfbit=%2
+)
+
+.\wwv_gen2parser.exe -o %1.fw %1
+.\wbf_decode.exe %1.fw %1.awf %wfbit%
+rem @PAUSE
+
+///////////////////////////////////////////////////////////////////
+
+在cmd.exe 下 "ntx_wtf2awf.bat 320_G096_AB1A01_ED068TG1H2_TC.wbf"
+
+%1 即為第一個參數 320_G096_AB1A01_ED068TG1H2_TC.wbf
+if (%2)==()  因為沒有輸入第二個參數
+   CMD畫面輸出 ""converting 320_G096_AB1A01_ED068TG1H2_TC.wbf to 320_G096_AB1A01_ED068TG1H2_TC.wbf.awf ...""
+
+
+之後下了兩個指令 : .\wwv_gen2parser.exe -o 320_G096_AB1A01_ED068TG1H2_TC.wbf.fw 320_G096_AB1A01_ED068TG1H2_TC.wbf
+                   .\wbf_decode.exe 320_G096_AB1A01_ED068TG1H2_TC.wbf.fw 320_G096_AB1A01_ED068TG1H2_TC.wbf.awf 5

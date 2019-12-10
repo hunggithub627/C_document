@@ -1,0 +1,25 @@
+using IQ;
+using NI;
+
+dynamic _inst; //原本的 Instrument _inst
+
+main()
+{
+    if (testitem.init.instrument == "NI")
+    {
+          Type inst_type = Type.GetType("NI.InstControl");
+          _inst = Activator.CreateInstance(inst_type);
+    }
+    else if (testitem.init.instrument == "IQ")
+    {
+          Type inst_type = Type.GetType("IQ.InstControl");
+          _inst = Activator.CreateInstance(inst_type);
+    }
+}
+
+
+New出Instance 
+if (testitem.init.instrument == "NI")
+    _inst = new NI.InstControl(ip, port);
+else if (testitem.init.instrument == "IQ")
+    _inst = new IQ.InstControl(ip, port);

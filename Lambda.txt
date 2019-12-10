@@ -1,0 +1,7 @@
+bool isEven(int num) => num % 2 == 0;
+
+bool hasEvenNumbers = Array.Exists(numbers, (int num) => num % 2 == 0 );
+
+bool hasEvenNumbers = Array.Exists(numbers, (num) => num % 2 == 0 );
+
+bool hasEvenNumbers = Array.Exists(numbers, num => num % 2 == 0 );

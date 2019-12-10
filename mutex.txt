@@ -1,0 +1,50 @@
+        private static Mutex mut = new Mutex();
+
+static void Main()
+        {
+           
+            Console.WriteLine("Main thread 1");
+
+            Program pgm1 = new Program();
+            pgm1.odr = 1;
+            Thread t1 = new Thread(new ThreadStart(pgm1.Test));
+            t1.Start();
+      
+            Console.WriteLine("Main thread 2");
+
+            Program pgm2 = new Program();
+            pgm2.odr = 2;
+            Thread t2 = new Thread(new ThreadStart(pgm2.Test));
+            t2.Start();
+
+            Console.ReadKey();
+        }
+
+public void Test()
+        {
+            Dut dut1 = new Dut();
+            Instrument ins1 = new Instrument();
+	    Console.WriteLine("In Test Begin " + odr);
+
+            mut.WaitOne();
+
+            dut1.Ini(odr);
+           
+            ins1.Ini(odr);
+
+            mut.ReleaseMutex();
+       
+        }
+
+加入 WaitOne() 和 ReleaseMutex() 
+可以確保一定會先做完 pgm1 的 thread
+
+結果 :
+Main thread 1
+Main thread 2
+In Test Begin 1 
+In Test Begin 2
+DUT Ini 1
+INstru Ini 1
+DUT Ini 2
+INstru Ini 2

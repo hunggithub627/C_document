@@ -1,0 +1,3 @@
+Random rnd = new Random();
+
+int rxOk = rnd.Next(750, 1000);

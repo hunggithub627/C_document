@@ -1,0 +1,90 @@
+Utitliy.cs
+
+public delegate void RxDataEventHandler(object sender, RxDataEventArgs e);
+
+public class RxDataEventArgs : EventArgs
+{
+	public string RxData { get; set; }
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Mainform.cs
+
+    class form_main
+	{
+	
+		bool DutInit()
+		{
+			_dut = new DutControl();
+			_dut.RxdataReached += AddDataMethod_RxDataReached;
+		}
+		
+		void AddDataMethod_RxDataReached(Object sender, RxDataEventArgs e)
+		{
+			if (rtb_console.InvokeRequired)
+			{
+				AddDataDelegate2 d = new AddDataDelegate2(AddDataMethod_RxDataReached);
+				this.Invoke(d, new object[] { sender, e });
+			}
+			else
+			{
+				rtb_console.AppendText(e.RxData);
+			}
+
+		}
+		
+		public delegate void AddDataDelegate2(Object sender, RxDataEventArgs e);
+	}
+	
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	
+	
+DUT.cs
+
+    partial class DutControl
+    {
+	
+		RxDataEventArgs args;
+		 
+		public DutControl()
+		{
+			args = new RxDataEventArgs();
+
+		}
+			
+		public bool dut_initialize()
+		{
+			srp_dut = new SerialClient("COM4", 115200);
+			srp_dut.OnReceiving += new EventHandler<DataStreamEventArgs>(receiveHandler);
+		}
+			
+		private void receiveHandler(object sender, DataStreamEventArgs e)
+		{
+			if (clear)
+			{
+				rxdata = "";
+				clear = false;
+			}
+			if (!clear)
+			{
+				string data = System.Text.Encoding.UTF8.GetString(e.Response);
+				rxdata = rxdata + data;
+
+				args.RxData = data; // print on rtb_console
+				OnThresholdReached(args);
+			}
+		}
+			
+		protected virtual void OnThresholdReached(RxDataEventArgs e)
+		{
+			RxDataEventHandler handler = RxdataReached;
+			if (handler != null)
+			{
+				handler(this, e);
+			}
+		}
+
+		public event RxDataEventHandler RxdataReached;
+	}

@@ -1,0 +1,126 @@
+委派的範例
+delegate string ConvertMethod(string inString);
+
+public class DelegateExample
+{
+    public static void Main()
+    {
+        // Instantiate delegate to reference UppercaseString method
+        // 將委派型別ConvertMethod的實體去參考UppercaseString方法
+        ConvertMethod aConvertMeth = UppercaseString;
+        string name = "Dakota";
+        // Use delegate instance to call UppercaseString method
+        Console.WriteLine(aConvertMeth(name));
+    }
+
+    private static string UppercaseString(string inputString)
+    {
+        return inputString.ToUpper();
+    }
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+不用明確定義委派方法，以 Func 來簡化程式碼為
+
+using System;
+
+public class GenericFunc
+{
+    public static void Main()
+    {
+        // Instantiate delegate to reference UppercaseString method
+        //Func<in T, out TResult>
+        Func<string, string> aConvertMethod = UppercaseString;
+        string name = "Dakota";
+        // Use delegate instance to call UppercaseString method
+        Console.WriteLine(aConvertMethod(name));
+        Console.ReadKey();
+    }
+
+    private static string UppercaseString(string inputString)
+    {
+        return inputString.ToUpper();
+    }
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Func<out TResult> 沒有input parameter
+
+public class GenericFunc
+{
+    public static void Main()
+    {
+        //Func<out TResult>
+        Func<string> sayHello = Show;
+        Console.WriteLine(sayHello());
+        Console.ReadKey();
+    }
+
+    private static string Show()
+    {
+        return "Hello";
+    }
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+二、Action 委派
+
+若要參考有一個參數並傳回 void (在 Visual Basic 中是宣告為 Sub 而非 Function) 的方法，
+
+可使用泛型 Action<T> 委派代替
+
+using System;
+
+public class GenericFunc
+{
+    public static void Main()
+    {
+
+        Action<string> aConvertMethod = UppercaseString;
+        string name = "Dakota";
+
+        aConvertMethod(name);
+        Console.ReadKey();
+    }
+
+    private static void UppercaseString(string inputString)
+    {
+        Console.WriteLine(inputString.ToUpper());
+    }
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+使用Lambda運算式
+
+using System;
+
+public class Anonymous
+{
+    public static void Main()
+    {
+        Func<string, string> convert = s => s.ToUpper();
+
+        string name = "Dakota";
+        Console.WriteLine(convert(name));
+    }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+三、結論
+
+1、Action<T>泛型的委派型別功能也是跟Func一樣，只是回傳值為void。
+
+2、每個Func委派型別的簽章，傳入的參數會是零到四，而最後一個的型別參數是代表回傳型別。
+
+例如：Func<string,int>，代表傳入型別為string而回型別為int。
+
+3、Action<T>泛型委派的原型宣告為 public delegate void Action<in T>(T obj);
+
+注意泛型參數 T 前面的修飾詞「in」，代表這是個逆變型（contravariant）參數
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`

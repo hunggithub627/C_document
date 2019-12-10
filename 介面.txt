@@ -1,0 +1,137 @@
+介面摘要
+介面具有下列屬性：
+
+1.介面類似只有抽象成員的抽象基底類別。 
+任何實作介面的類別或結構必須實作它的所有成員。
+
+2.介面無法直接具現化。 其成員是由實作介面的任何類別或結構實作。
+
+3.介面可以包含事件、索引子、方法和屬性。
+
+4.介面不包含方法的實作。
+
+5.類別或結構可以實作多個介面。 類別可以繼承基底類別，也會實作一或多個介面。
+
+
+@ 類別或結構可以實作多個介面，但類別只會繼承單一類別抽象或不繼承。
+
+@ 若要實作介面成員，實作類別的對應成員必須是公用、非靜態，且具有與介面成員相同的名稱和簽章。
+
+@ 當類別或結構實作介面時，類別或結構必須提供介面定義之所有成員的實作
+
+@ 介面本身不提供功能讓類別或結構可以如同繼承基底類別功能一般繼承。 
+  不過，如果基底類別實作介面，則衍生自基底類別的任何類別都會繼承該實作。
+  介面可以繼承自其他介面。 類別可能透過基底類別包含介面多次，繼承或透過其他介面繼承的介面
+
+
+/////////////////////////////////////////////////
+
+class Test 
+{
+    static void Main()
+    {
+        SampleClass sc = new SampleClass();
+        IControl ctrl = sc;
+        ISurface srfc = sc;
+
+        // The following lines all call the same method.
+        sc.Paint();
+        ctrl.Paint();
+        srfc.Paint();
+    }
+}
+
+
+interface IControl
+{
+    void Paint();
+}
+interface ISurface
+{
+    void Paint();
+}
+class SampleClass : IControl, ISurface
+{
+    // Both ISurface.Paint and IControl.Paint call this method. 
+    public void Paint()
+    {
+        Console.WriteLine("Paint method in SampleClass");
+    }
+}
+
+////////////////////////////////////////////////////////////
+明確實作介面成員 因為有相同的成員方方法 paint
+public class SampleClass : IControl, ISurface
+{
+    void IControl.Paint()
+    {
+        System.Console.WriteLine("IControl.Paint");
+    }
+    void ISurface.Paint()
+    {
+        System.Console.WriteLine("ISurface.Paint");
+    }
+}
+
+// Call the Paint methods from Main.
+
+SampleClass obj = new SampleClass();
+//obj.Paint();  // Compiler error. 從類別執行個體無法存取已明確實作的介面成員
+
+IControl c = obj;
+c.Paint();  // Calls IControl.Paint on SampleClass.
+
+ISurface s = obj;
+s.Paint(); // Calls ISurface.Paint on SampleClass.
+
+/////////////////////////////////////////////////////////////
+
+1 namespace ExplicitInterfaceImplementation
+ 2 {
+ 3     class Program : IPrintOne,IPrintTwo, IPrintThree
+ 4     {
+ 5         static void Main(string[] args)
+ 6         {
+ 7             Program p = new Program();
+ 8             p.Print();
+ 9             (p as IPrintTwo).Print();
+10             ((IPrintThree)p).Print();
+11         }
+12 
+13 
+14 
+15         public void Print()
+16         {
+17             Console.WriteLine("Print One Interface");
+18         }
+19         // explicitly implement IPrintTwo
+20         void IPrintTwo.Print()
+21         {
+22             Console.WriteLine("Print Two Interface");
+23         }
+24         // explicitly implement IPrintThree
+25         string IPrintThree.Print()
+26         {
+27             Console.WriteLine("Print two Interface");
+28             return "asd";
+29         }
+30     }
+31 
+32     interface IPrintOne
+33     {
+34         void Print();
+35     }
+36 
+37     interface IPrintTwo
+38     {
+39         void Print();
+40     }
+41 
+42     interface IPrintThree
+43     {
+44         string Print();
+45     }
+46 }
+/////////////////////////////////////////////////////////////////////
+
+ 

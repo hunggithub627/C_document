@@ -1,0 +1,40 @@
+[1]物件若直接使用 = 複製   是ref 的方式
+main()
+{
+	Product ori_obj = new Product();
+	ori_obj.a1 = 10;
+	Product new_obj = ori_obj;
+	new_obj.a1 = 11;
+
+	Debug.Assert(ori_obj == new_obj); // 這裡是成立的
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[2]使用clone 方式
+
+main()
+{
+	Product ori_obj = new Product();
+	ori_obj.a1 = 10;
+	Product new_obj = (Product)ori_obj.Clone();
+	new_obj.a1 = 11;
+
+	Debug.Assert(ori_obj == new_obj); // 這裡是不成立的
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+public class Product:ICloneable
+{
+	private string productName;
+	public int a1;
+	public int a2;
+	public void ProductName(string p)
+	{
+		productName = p;
+	}
+
+	public object Clone()
+	{
+		return this.MemberwiseClone();
+	}
+}

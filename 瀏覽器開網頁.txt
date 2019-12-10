@@ -1,0 +1,14 @@
+//使用預設瀏覽器
+System.Diagnostics.Process.Start( "http://google.com.tw");
+
+//使用IE瀏覽器
+System.Diagnostics.Process.Start("iexplore.exe", "http://google.com.tw");
+
+//使用Chrome瀏覽器
+System.Diagnostics.Process.Start("chrome.exe", "http://google.com.tw");
+
+//使用Firefox瀏覽器
+System.Diagnostics.Process.Start("firefox.exe", "http://google.com.tw");
+
+//使用Safari瀏覽器
+System.Diagnostics.Process.Start("safari.exe", "http://google.com.tw");
