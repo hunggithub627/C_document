@@ -1,0 +1,9 @@
+ StreamReader sr = File.OpenText(file);
+            string nextLine;
+            int count = 0;
+            while ((nextLine = sr.ReadLine()) != null)
+            {
+                if (nextLine.Contains(result))
+                    count++; 
+            }
+            sr.Close();

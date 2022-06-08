@@ -1,0 +1,82 @@
+用以下兩種方式解決
+
+public bool execute(string workdir, string file, string result)
+        {
+            bool find = false;
+            bool find2 = false;
+            rxdata = "";
+
+            Process myProcess = new Process();
+
+            myProcess.StartInfo.UseShellExecute = false;
+            myProcess.StartInfo.WorkingDirectory = workdir;
+            myProcess.StartInfo.FileName = file;
+            myProcess.StartInfo.CreateNoWindow = true;
+            myProcess.StartInfo.RedirectStandardOutput = true;
+            myProcess.StartInfo.RedirectStandardInput = true;
+            myProcess.Start();
+
+            string standard_output;
+          
+            myProcess.StandardInput.Flush();
+            myProcess.StandardInput.Close();
+            standard_output = myProcess.StandardOutput.ReadToEnd();
+            rtb_console.AppendText(standard_output + "\n");
+            rxdata += standard_output + "\n";
+            Application.DoEvents();
+           
+            myProcess.WaitForExit();
+
+            if (rxdata.Contains(result))
+            {
+                find = true;
+            }
+            return find;
+        }
+
+        public bool execute2(string workdir, string file, string result)
+        {
+            bool find = false;
+            bool find2 = false;
+            rxdata = "";
+
+            Process myProcess = new Process();
+
+            myProcess.StartInfo.UseShellExecute = false;
+            myProcess.StartInfo.WorkingDirectory = workdir;
+            myProcess.StartInfo.FileName = file;
+            myProcess.StartInfo.CreateNoWindow = true;
+            myProcess.StartInfo.RedirectStandardOutput = true;
+            //myProcess.StartInfo.RedirectStandardInput = true;
+            myProcess.Start();
+
+            string standard_output;
+
+            while (!myProcess.StandardOutput.EndOfStream)
+            {
+                standard_output = myProcess.StandardOutput.ReadLine();
+                rtb_console.AppendText(standard_output + "\n");
+                rxdata += standard_output + "\n";
+                Application.DoEvents();
+
+                if (rxdata.Contains("Success"))
+                {
+                    break;
+                }
+
+                if (rxdata.Contains("error"))
+                {
+                    break;
+                }
+
+            }
+
+
+            myProcess.WaitForExit();
+
+            if (rxdata.Contains(result))
+            {
+                find = true;
+            }
+            return find;
+        }

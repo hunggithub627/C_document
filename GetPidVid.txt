@@ -1,0 +1,59 @@
+public static bool FindPIDVID(String VID, String PID)
+        {
+            // 讀取PID和VID
+            String pattern = String.Format("^VID_{0}.PID_{1}", VID, PID);
+            Regex _rx = new Regex(pattern, RegexOptions.IgnoreCase);
+            List<string> comports = new List<string>();
+            RegistryKey rk1 = Registry.LocalMachine;
+            RegistryKey rk2 = rk1.OpenSubKey("SYSTEM\\CurrentControlSet\\Enum\\FTDIBUS");
+            foreach (String s3 in rk2.GetSubKeyNames())
+            {
+                //RegistryKey rk3 = rk2.OpenSubKey(s3);
+                //foreach (String s in rk3.GetSubKeyNames())
+                //{
+                    if (_rx.Match(s3).Success)
+                    {
+                        RegistryKey rk4 = rk2.OpenSubKey(s3);
+                    return true;
+                        //foreach (String s2 in rk4.GetSubKeyNames())
+                        //{
+                        //    RegistryKey rk5 = rk4.OpenSubKey(s2);
+                        //    RegistryKey rk6 = rk5.OpenSubKey("Device Parameters");
+                        //    comports.Add((string)rk6.GetValue("PortName"));
+                        //    // 獲取port name，如有多個相同設備，加入comports array
+                        //}
+                    }
+                //}
+            }
+            return false;
+        }
+
+
+public static List<string> ComPortNames(String VID, String PID)
+        {
+            // 讀取PID和VID
+            String pattern = String.Format("^VID_{0}.PID_{1}", VID, PID);
+            Regex _rx = new Regex(pattern, RegexOptions.IgnoreCase);
+            List<string> comports = new List<string>();
+            RegistryKey rk1 = Registry.LocalMachine;
+            RegistryKey rk2 = rk1.OpenSubKey("SYSTEM\\CurrentControlSet\\Enum");
+            foreach (String s3 in rk2.GetSubKeyNames())
+            {
+                RegistryKey rk3 = rk2.OpenSubKey(s3);
+                foreach (String s in rk3.GetSubKeyNames())
+                {
+                    if (_rx.Match(s).Success)
+                    {
+                        RegistryKey rk4 = rk3.OpenSubKey(s);
+                        foreach (String s2 in rk4.GetSubKeyNames())
+                        {
+                            RegistryKey rk5 = rk4.OpenSubKey(s2);
+                            RegistryKey rk6 = rk5.OpenSubKey("Device Parameters");
+                            comports.Add((string)rk6.GetValue("PortName"));
+                            // 獲取port name，如有多個相同設備，加入comports array
+                        }
+                    }
+                }
+            }
+            return comports;
+        }

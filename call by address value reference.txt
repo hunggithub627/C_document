@@ -1,0 +1,105 @@
+參考，可以想像成是一個變數或物件的別名 (alias)。通常，當函式 (function) 的參數 (parameter) 在函式中會被修改，
+而且要把這個修改結果讓呼叫函式的部份繼續使用，我們會用參考來當參數傳入函式中。
+讓我們看看下面的例子：
+
+void swap(int &a, int &b){
+int tmp = a;
+a = b;
+b = tmp;
+}
+
+當其他程式呼叫此交換程式時，只要直接寫swap(x, y)就能交換x與y的值。
+在這裡，a和b為x與y的別名，即：a就是x，b就是y，如同美國國父就是華盛頓一樣。
+a和b不是x和y的複製品，任何做用在a與b上的動作都會反應在x與y上面，反之亦然。
+
+------------------------------------------------------------------------------------
+若&前面有資料型態 (ex: int &)，則為參考，&前面有等號 (ex: int* p = &a)，則為取址。
+由於&同時具有多種意義，因此容易造成混淆。這裡列出的這個方法，可以幫助弄清楚每個&的意義。
+
+------------------------------------------------------------------------------------------
+
+call by address (或call by pointer)
+利用指標來做參數傳遞，這種方法骨子裡仍是call by value，
+只不過call by value的value，其資料型態為指標罷了。
+我們同樣看看用call by address來寫swap交換兩個integer的例子。
+void swap(int* a, int* b){
+int tmp = *a;
+*a = *b;
+*b = tmp;
+}
+
+呼 叫swap時，要寫成swap(&x, &y)。呼叫swap時，x的指標 (x的儲存位置) 與y的指標 (y的儲存位置) 會被複製一份到swap中，
+然後把該位置內所記載的值做更換。swap結束後，&x (address of x) 和&y (address of y) 依然沒變，
+只是address of x所記錄之變數值與address of y所記錄之變數值交換了。
+因為&x 和&y 其實是利用call by value在傳，因此，call by address其實骨子裡就是call by value
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+call by reference
+這是C++才加進來的東西，C本身並沒有call by reference。call by reference基本上是把參數做個別名 (alias)，以下面的swap為例：
+swap(int &a, int &amp;b){
+int tmp = a;
+a = b;
+b = tmp;
+}
+
+未來使用時，只要呼叫swap(x, y)，就可以讓x和y的值交換。在這個例子中，a 就是 x, b 就是 y。這個觀念在上一節已經提過，在此不再贅述。
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+3. pointer to pointer, reference to pointer (int** v.s. int*&)
+當 我們用call by pointer (或address) 來傳遞參數時，被呼叫的函式複製一份pointer的值過去。
+但是，當我們想在函式內改變pointer的值 (而非pointer所指向之變數的值)，
+而且改變的效果要能在函式外看得到時，call by pointer就不足夠用了。
+此時應該用的是"call by pointer to pointer"或"call by reference to pointer"。我們先看下面的例子：
+
+int g_int = 0;
+void changePtr(int* pInt){
+pInt = &g_int;
+}
+void main(){
+int localInt = 1;
+int* localPInt = &localInt;
+changePtr(localPInt);
+printf("%d\n", *localPInt);
+}
+
+在這個例子中，印出來的數字仍然會是localInt的1，
+因為changPtr中的pInt是由localPInt「複製」過去的，對pInt做改變並不會反應到localPInt身上。
+我們先用pointer to pointer對localPInt做改變，請看下例。
+
+int g_int = 0;
+void changePtr(int** pInt){
+*pInt = &g_int;
+}
+void main(){
+int localInt = 1;
+int* localPInt = &localInt;
+changePtr(&localPInt);
+printf("%d\n", *localPInt);
+}
+
+本 例中，印出來的數字會是g_int的0。changePtr函式中的pInt是由&localPInt複製所得，
+因此對pInt做改變並不會影響 main中的&amp;localPInt (資料型態：pointer to pointer to integer)。
+但在changePtr函式中我們改變的對象是pInt所指向的內容，因此這項改變在main中會顯示出來。
+同樣的功能，我們也可改用reference to pointer來完成。
+但同樣切記，reference是C++才有的功能，因此reference to pointer也只能在支援C++的環境中使用。
+
+int g_int = 0;
+void changePtr(int* &refPInt){
+refPInt = &g_int;
+}
+void main(){
+int localInt = 1;
+int* localPInt = &localInt;
+changePtr(localPInt);
+printf("%d\n", *localPInt);
+}
+
+這 段程式印出來的數字會是0。因為在changePtr中，我們宣告的參數型態為int* &，
+即：reference to pointer to integer。因此，
+main中的localPInt與changePtr函式中的refPInt其實是「同一件東西」。
+另一種 常見的混淆是pointer array (指標陣列) 與pointer to pointers，
+因為兩種都可以寫成**的型式。如，int**可能是pointer to pointer to integer，
+也可能是integer pointer array。但pointer array的觀念相對來講要簡單且直觀許多，
+這裡我們就暫不花篇幅敘述。常見的例子：main(int argc, char** argv)其實應該是main(int argc, char* argv[])。

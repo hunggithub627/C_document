@@ -1,0 +1,20 @@
+    class ClassData
+    {
+        public string num;
+        public double price;
+        public double updown;
+    }
+
+List<ClassData>[] st_list;
+
+st_list = new List<ClassData>[10];
+///////////////////////////////////////
+
+取值
+st_list[i][j]
+
+加入LIST
+st_list[i].Add(cd);   第i個array
+
+i 代表 array_index 0 ~ 10
+j 代表 存了多少個ClasData 的 List   

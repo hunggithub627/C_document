@@ -1,0 +1,24 @@
+private delegate void SafeChangeControlTextCallDelegate(Control cc, string sText, Color foreColor = default);
+
+
+ChangeControlTextByAnotherThread(labelStatus, "預期的連線目標不相符!", Color.Red);
+
+
+private void ChangeControlTextByAnotherThread(Control cc, string sText, Color foreColor = default)
+        {
+            if (cc == null)
+                return;
+
+            if (cc.InvokeRequired)
+            {
+                var d = new SafeChangeControlTextCallDelegate(ChangeControlTextByAnotherThread);
+                cc.Invoke(d, new object[] { cc, sText, foreColor });
+            }
+            else
+            {
+                cc.Text = sText;
+                if (foreColor != default)
+                    cc.ForeColor = foreColor;
+                cc.Refresh();
+            }
+        }

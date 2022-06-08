@@ -1,0 +1,62 @@
+byte[] byteArray = System.Text.Encoding.Default.GetBytes ( str );
+反過來，byte[]轉成string：
+string str = System.Text.Encoding.Default.GetString ( byteArray );
+
+其它編碼方式的，如System.Text.UTF8Encoding，System.Text.UnicodeEncoding class等；例如：
+string類型轉成ASCII byte[]：（"01" 轉成 byte[] = new byte[]{ 0x30, 0x31}）
+byte[] byteArray = System.Text.Encoding.ASCII.GetBytes ( str );
+ASCII byte[] 轉成string：（byte[] = new byte[]{ 0x30, 0x31} 轉成 "01"）
+string str = System.Text.Encoding.ASCII.GetString ( byteArray );
+
+有時候還有這樣一些需求：
+byte[] 轉成原16進制格式的string，例如0xae00cf, 轉換成 "ae00cf"；new byte[]{ 0x30, 0x31}轉成"3031":
+        public static string ToHexString ( byte[] bytes ) // 0xae00cf => "AE00CF "
+        {
+            string hexString = string.Empty;
+            if ( bytes != null )
+            {
+                StringBuilder strB = new StringBuilder ();
+
+                for ( int i = 0; i < bytes.Length; i++ )
+                {
+                    strB.Append ( bytes[i].ToString ( "X2" ) );
+                }
+                hexString = strB.ToString ();
+            }
+            return hexString;
+        }
+
+反過來，16進制格式的string 轉成byte[]，例如, "ae00cf"轉換成0xae00cf，長度縮減一半；"3031" 轉成new byte[]{ 0x30, 0x31}:
+        public static byte[] GetBytes(string hexString, out int discarded)
+        {
+            discarded = 0;
+            string newString = "";
+            char c;
+            // remove all none A-F, 0-9, characters
+            for (int i=0; i<hexString.Length; i++)
+            {
+                c = hexString[i];
+                if (IsHexDigit(c))
+                    newString += c;
+                else
+                    discarded++;
+            }
+            // if odd number of characters, discard last character
+            if (newString.Length % 2 != 0)
+            {
+                discarded++;
+                newString = newString.Substring(0, newString.Length-1);
+            }
+
+            int byteLength = newString.Length / 2;
+            byte[] bytes = new byte[byteLength];
+            string hex;
+            int j = 0;
+            for (int i=0; i<bytes.Length; i++)
+            {
+                hex = new String(new Char[] {newString[j], newString[j+1]});
+                bytes[i] = HexToByte(hex);
+                j = j+2;
+            }
+            return bytes;
+        }
